@@ -25,6 +25,7 @@ let scene,
 
 let database;
 let firebaseEnabled = false;
+let firebaseAuth;
 
 function init() {
   setupScene();
@@ -211,7 +212,7 @@ function setupInput() {
 }
 
 function setupFirebase() {
-  const firebaseConfig = {
+  const firebaseConfig = window.FIREBASE_CONFIG || {
     apiKey: "YOUR_API_KEY_HERE",
     authDomain: "YOUR_AUTH_DOMAIN_HERE",
     databaseURL: "YOUR_DATABASE_URL_HERE",
@@ -222,7 +223,7 @@ function setupFirebase() {
   };
 
   const hasPlaceholderConfig = Object.values(firebaseConfig).some((value) => {
-    return typeof value === "string" && value.includes("YOUR_") || value === "";
+    return (typeof value === "string" && value.includes("YOUR_")) || value === "";
   });
 
   if (hasPlaceholderConfig || typeof firebase === "undefined") {
@@ -231,9 +232,27 @@ function setupFirebase() {
     return;
   }
 
-  firebase.initializeApp(firebaseConfig);
-  database = firebase.database();
-  firebaseEnabled = true;
+  try {
+    firebase.initializeApp(firebaseConfig);
+    database = firebase.database();
+    firebaseAuth = firebase.auth();
+    firebaseEnabled = true;
+
+    firebaseAuth
+      .signInAnonymously()
+      .then(() => {
+        console.info("Firebase anonymous sign-in ready.");
+        fetchLeaderboard();
+      })
+      .catch((error) => {
+        console.warn("Firebase anonymous sign-in unavailable, falling back to local storage.", error);
+        firebaseEnabled = false;
+        fetchLeaderboard();
+      });
+  } catch (error) {
+    console.warn("Firebase setup failed, falling back to local storage.", error);
+    firebaseEnabled = false;
+  }
 }
 
 function sanitizeName(rawName) {
