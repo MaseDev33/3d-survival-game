@@ -25,7 +25,6 @@ let scene,
 
 let database;
 let firebaseEnabled = false;
-let firebaseAuth;
 
 function init() {
   setupScene();
@@ -235,23 +234,12 @@ function setupFirebase() {
   try {
     firebase.initializeApp(firebaseConfig);
     database = firebase.database();
-    firebaseAuth = firebase.auth();
     firebaseEnabled = true;
-
-    firebaseAuth
-      .signInAnonymously()
-      .then(() => {
-        console.info("Firebase anonymous sign-in ready.");
-        fetchLeaderboard();
-      })
-      .catch((error) => {
-        console.warn("Firebase anonymous sign-in unavailable, falling back to local storage.", error);
-        firebaseEnabled = false;
-        fetchLeaderboard();
-      });
+    fetchLeaderboard();
   } catch (error) {
     console.warn("Firebase setup failed, falling back to local storage.", error);
     firebaseEnabled = false;
+    fetchLeaderboard();
   }
 }
 
