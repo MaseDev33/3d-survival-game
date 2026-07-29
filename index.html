@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Neon trench survival game with online leaderboard" />
+    <title>Neon Trench Survival</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div id="hud">
+      <div class="title">NEON TRENCH</div>
+      <div id="score">Survival Time: 0s</div>
+      <div class="tips">Use A/D or ←/→ to dodge the blocks</div>
+    </div>
+
+    <div id="overlay" class="overlay hidden">
+      <div class="panel">
+        <h1>Flight Terminated</h1>
+        <p id="finalScore">Final Survival Time: 0s</p>
+        <label for="pilotName">Pilot Callsign</label>
+        <input id="pilotName" maxlength="10" placeholder="Pilot" />
+        <div class="buttons">
+          <button id="submitBtn">Submit Score</button>
+          <button id="playAgainBtn">Play Again</button>
+        </div>
+        <div class="leaderboard-card">
+          <h2>🏆 TOP PILOTS</h2>
+          <div id="leaderboardTable" class="leaderboard-table"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    <script src="game.js"></script>
+  </body>
+</html>
